@@ -6,30 +6,25 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
-
-  // Set global API prefix
   app.setGlobalPrefix('api');
 
-  // Enable CORS
   app.enableCors({
-    origin: '*', // Allow all origins for dev simplicity, can narrow down in production
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
-  // Enable global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // Auto-transform payloads to DTO instances
-      whitelist: true, // Strip non-DTO properties
-      forbidNonWhitelisted: false, // Don't crash on extra properties, just ignore
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: false,
       transformOptions: {
-        enableImplicitConversion: true, // Automatically converts query params to numbers/booleans if matching types
+        enableImplicitConversion: true,
       },
     }),
   );
 
-  // Enable global exception filter
   app.useGlobalFilters(new HttpExceptionFilter());
 
   const port = process.env.PORT || 3001;

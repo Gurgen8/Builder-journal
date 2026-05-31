@@ -19,7 +19,7 @@ import { QueryWorkLogDto } from './dto/query-work-log.dto';
 
 @Controller('work-logs')
 export class WorkLogsController {
-  constructor(private readonly workLogsService: WorkLogsService) {}
+  constructor(private readonly workLogsService: WorkLogsService) { }
 
   @Get()
   async findAll(@Query() query: QueryWorkLogDto) {

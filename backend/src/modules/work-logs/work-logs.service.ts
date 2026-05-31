@@ -9,7 +9,7 @@ import { Prisma } from '@prisma/client';
 export class WorkLogsService {
   private readonly logger = new Logger(WorkLogsService.name);
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async findAll(query: QueryWorkLogDto) {
     this.logger.log(`Fetching work logs with query params: ${JSON.stringify(query)}`);
@@ -17,7 +17,6 @@ export class WorkLogsService {
 
     const where: Prisma.WorkLogWhereInput = {};
 
-    // 1. Filter by Date Range
     if (startDate || endDate) {
       where.date = {};
       if (startDate) {
@@ -28,12 +27,10 @@ export class WorkLogsService {
       }
     }
 
-    // 2. Filter by Work Type
     if (workTypeId) {
       where.workTypeId = workTypeId;
     }
 
-    // 3. Global Text Search
     if (search) {
       const searchTrimmed = search.trim();
       where.OR = [
@@ -54,7 +51,6 @@ export class WorkLogsService {
       ];
     }
 
-    // 4. Sorting Setup
     let orderBy: Prisma.WorkLogOrderByWithRelationInput = {};
     const orderDirection = sortOrder || 'desc';
 
@@ -113,7 +109,6 @@ export class WorkLogsService {
   async create(createWorkLogDto: CreateWorkLogDto) {
     this.logger.log(`Creating work log for worker: "${createWorkLogDto.workerName}"`);
 
-    // Verify work type exists
     const workType = await this.prisma.workType.findUnique({
       where: { id: createWorkLogDto.workTypeId },
     });
@@ -147,10 +142,8 @@ export class WorkLogsService {
   async update(id: string, updateWorkLogDto: UpdateWorkLogDto) {
     this.logger.log(`Updating work log with ID: ${id}`);
 
-    // Ensure record exists
     await this.findOne(id);
 
-    // If workTypeId is changing, verify it exists
     if (updateWorkLogDto.workTypeId) {
       const workType = await this.prisma.workType.findUnique({
         where: { id: updateWorkLogDto.workTypeId },
@@ -199,7 +192,6 @@ export class WorkLogsService {
   async remove(id: string) {
     this.logger.log(`Deleting work log with ID: ${id}`);
 
-    // Ensure record exists
     await this.findOne(id);
 
     return this.prisma.workLog.delete({

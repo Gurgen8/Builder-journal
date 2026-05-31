@@ -34,27 +34,22 @@ export class HttpExceptionFilter implements ExceptionFilter {
       const res = exception.getResponse();
 
       if (typeof res === 'object' && res !== null) {
-        // Extract validation errors from class-validator
         const errorResponseObj = res as Record<string, unknown>;
         const validationMessage = errorResponseObj.message;
-        message = (errorResponseObj.error as string) || exception.message;
 
         if (Array.isArray(validationMessage)) {
           errors = validationMessage;
           message = 'Ошибка валидации полей';
         } else if (typeof validationMessage === 'string') {
-          errors = [validationMessage];
+          message = validationMessage;
         } else {
-          errors = res;
+          message = (errorResponseObj.error as string) || exception.message;
         }
       } else {
         message = exception.message;
       }
     } else {
-      // Log unhandled server errors (database connection drop, runtime errors)
       this.logger.error('Unhandled Exception caught by filter:', exception);
-
-      // Prisma-specific constraint checks can go here if needed
       const errorString = String(exception);
       if (errorString.includes('PrismaClientKnownRequestError') && errorString.includes('P2003')) {
         status = HttpStatus.CONFLICT;
@@ -76,7 +71,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
       ...(errors && { errors }),
     };
 
-    // Log all client/server errors
     if (status >= 500) {
       this.logger.error(
         `[${request.method}] ${request.url} - Status ${status} - Error: ${message}`,

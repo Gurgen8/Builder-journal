@@ -11,8 +11,8 @@ Production-ready веб-приложение для ведения и контр
 Вся система упакована в Docker-контейнеры и запускается одной командой. Перед запуском убедитесь, что порты `3000`, `3001` и `5432` свободны.
 
 1. **Клонируйте проект и перейдите в корень:**
-   ```bash
-   cd /Users/gurgenmkrtchyan/.gemini/antigravity-ide/scratch/construction-work-log
+   ```bash 
+   construction-work-log
    ```
 
 2. **Запустите оркестрацию контейнеров:**
