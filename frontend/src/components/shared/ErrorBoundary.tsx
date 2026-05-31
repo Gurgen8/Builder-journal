@@ -1,6 +1,10 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { Box, Typography, Button, Container, Paper } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
+import { TOKENS } from '../../constants/tokens';
+import { Card } from './Card';
+import { Text } from './Text';
+import { Button } from './Button';
 
 interface Props {
   children?: ReactNode;
@@ -34,32 +38,29 @@ export class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         <Container maxWidth="sm" sx={{ mt: 10 }}>
-          <Paper
-            elevation={0}
+          <Card
             sx={{
               p: 5,
-              borderRadius: 4,
+              borderRadius: TOKENS.borderRadius.large,
               textAlign: 'center',
-              border: '1px solid',
-              borderColor: 'divider',
-              boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
+              boxShadow: TOKENS.shadows.errorCard,
             }}
           >
             <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
               <ErrorOutlineRoundedIcon color="error" sx={{ fontSize: 60 }} />
             </Box>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, fontFamily: 'Outfit, sans-serif' }}>
+            <Text variant="h5" gutterBottom sx={{ fontWeight: 700 }}>
               Что-то пошло не так
-            </Typography>
-            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+            </Text>
+            <Text variant="body1" color="text.secondary" sx={{ mb: 4 }}>
               Произошла непредвиденная ошибка при отрисовке интерфейса. Пожалуйста, перезапустите приложение или обратитесь к системному администратору.
-            </Typography>
+            </Text>
             {this.state.error && (
               <Box
                 sx={{
                   p: 2,
                   bgcolor: 'action.hover',
-                  borderRadius: 2,
+                  borderRadius: TOKENS.borderRadius.small,
                   textAlign: 'left',
                   mb: 4,
                   overflowX: 'auto',
@@ -67,20 +68,18 @@ export class ErrorBoundary extends Component<Props, State> {
                   borderColor: 'divider',
                 }}
               >
-                <Typography variant="caption" component="pre" sx={{ fontFamily: 'monospace', color: 'error.main' }}>
-                  {this.state.error.toString()}
-                </Typography>
+                <TypographyMonospace text={this.state.error.toString()} />
               </Box>
             )}
             <Button
               variant="contained"
               color="primary"
               onClick={this.handleReset}
-              sx={{ borderRadius: 2, px: 4, py: 1, boxShadow: 'none' }}
+              sx={{ px: 4, py: 1 }}
             >
               Вернуться на главную
             </Button>
-          </Paper>
+          </Card>
         </Container>
       );
     }
@@ -88,3 +87,20 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+
+const TypographyMonospace: React.FC<{ text: string }> = ({ text }) => {
+  return (
+    <Box
+      component="pre"
+      sx={{
+        m: 0,
+        fontFamily: 'monospace',
+        color: 'error.main',
+        fontSize: '0.825rem',
+        overflowX: 'auto',
+      }}
+    >
+      {text}
+    </Box>
+  );
+};

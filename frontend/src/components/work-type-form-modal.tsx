@@ -2,18 +2,13 @@ import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Box,
-} from '@mui/material';
-import { useCreateWorkType } from '../../entities/work-type/api';
-import { useToast } from '../../shared/ui/toast-provider';
-import { ApiError } from '../../shared/types';
+import { Box } from '@mui/material';
+import { useCreateWorkType } from '../services/work-type-service';
+import { useToast } from './shared/ToastProvider';
+import { ApiError } from '../types';
+import { Modal } from './shared/Modal';
+import { Input } from './shared/Input';
+import { Button } from './shared/Button';
 
 const workTypeFormSchema = z.object({
   name: z.string()
@@ -46,7 +41,6 @@ export const WorkTypeFormModal: React.FC<WorkTypeFormModalProps> = ({ open, onCl
     },
   });
 
-  // Reset form when modal is closed/opened
   React.useEffect(() => {
     if (!open) {
       reset({ name: '' });
@@ -72,62 +66,49 @@ export const WorkTypeFormModal: React.FC<WorkTypeFormModalProps> = ({ open, onCl
 
   const isSaving = createMutation.isPending;
 
+
+
   return (
-    <Dialog
+    <Modal
       open={open}
       onClose={isSaving ? undefined : onClose}
       maxWidth="xs"
-      fullWidth
-      PaperProps={{
-        sx: { borderRadius: 3, p: 1 },
-      }}
+      title="Добавить вид работ"
     >
-      <DialogTitle sx={{ pb: 1, fontWeight: 700, fontFamily: 'Outfit, sans-serif' }}>
-        Добавить вид работ
-      </DialogTitle>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate id="work-type-form">
+        <Box sx={{ mt: 1 }}>
+          <Controller
+            name="name"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                label="Наименование вида работ"
+                placeholder="Например, Облицовка фасада плитами"
+                required
+                error={!!errors.name}
+                helperText={errors.name?.message}
+                disabled={isSaving}
+                autoFocus
+              />
+            )}
+          />
+        </Box>
 
-      <form onSubmit={handleSubmit(onSubmit)} noValidate>
-        <DialogContent sx={{ py: 1 }}>
-          <Box sx={{ mt: 1 }}>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Наименование вида работ"
-                  placeholder="Например, Облицовка фасада плитами"
-                  fullWidth
-                  required
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                  disabled={isSaving}
-                  autoFocus
-                />
-              )}
-            />
-          </Box>
-        </DialogContent>
-
-        <DialogActions sx={{ p: 3, gap: 1 }}>
-          <Button onClick={onClose} variant="outlined" color="inherit" disabled={isSaving} sx={{ borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1.5, mt: 4 }}>
+          <Button onClick={onClose} variant="outlined" color="inherit" disabled={isSaving}>
             Отмена
           </Button>
           <Button
             type="submit"
             variant="contained"
             color="primary"
-            disabled={isSaving}
-            sx={{
-              borderRadius: 2,
-              boxShadow: 'none',
-              '&:hover': { boxShadow: 'none' },
-            }}
+            isLoading={isSaving}
           >
-            {isSaving ? 'Сохранение...' : 'Добавить'}
+            Добавить
           </Button>
-        </DialogActions>
+        </Box>
       </form>
-    </Dialog>
+    </Modal>
   );
 };

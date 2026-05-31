@@ -1,10 +1,26 @@
 import React from 'react';
-import { Box, Drawer, AppBar, Toolbar, Typography, List, ListItemButton, ListItemIcon, ListItemText, Divider, Container, useMediaQuery, useTheme, IconButton } from '@mui/material';
+import {
+  Box,
+  Drawer,
+  AppBar,
+  Toolbar,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Container,
+  useMediaQuery,
+  useTheme,
+  IconButton
+} from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
+import { TOKENS } from '../../constants/tokens';
+import { Text } from './Text';
 
 const DRAWER_WIDTH = 280;
 
@@ -27,35 +43,35 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
 
   const drawerContent = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'background.paper' }}>
-      {/* Brand header */}
+
       <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Box 
-          sx={{ 
-            p: 1, 
-            borderRadius: 2, 
-            bgcolor: 'primary.main', 
+        <Box
+          sx={{
+            p: 1,
+            borderRadius: TOKENS.borderRadius.small,
+            bgcolor: 'primary.main',
             color: 'primary.contrastText',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 12px 0 rgba(0, 102, 102, 0.2)'
+            boxShadow: TOKENS.shadows.drawerBrand
           }}
         >
           <ConstructionRoundedIcon sx={{ fontSize: 24 }} />
         </Box>
         <Box>
-          <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: 'Outfit, sans-serif', color: 'text.primary', lineHeight: 1.2 }}>
+          <Text variant="subtitle1" sx={{ fontWeight: 800, color: 'text.primary', lineHeight: 1.2 }}>
             СТРОЙЖУРНАЛ
-          </Typography>
-          <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+          </Text>
+          <Text variant="caption" sx={{ color: 'text.secondary', fontWeight: 600 }}>
             Система учета работ
-          </Typography>
+          </Text>
         </Box>
       </Box>
 
       <Divider sx={{ opacity: 0.6 }} />
 
-      {/* Navigation menu */}
+      {}
       <List sx={{ px: 2, py: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname === item.path;
@@ -67,7 +83,7 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
                 if (isMobile) setMobileOpen(false);
               }}
               sx={{
-                borderRadius: 3,
+                borderRadius: TOKENS.borderRadius.small,
                 py: 1.5,
                 px: 2,
                 transition: 'all 0.2s ease',
@@ -83,13 +99,13 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
               <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>
                 {item.icon}
               </ListItemIcon>
-              <ListItemText 
-                primary={item.text} 
-                primaryTypographyProps={{ 
+              <ListItemText
+                primary={item.text}
+                primaryTypographyProps={{
                   fontWeight: isActive ? 600 : 500,
                   fontSize: '0.925rem',
                   fontFamily: 'Inter, sans-serif'
-                }} 
+                }}
               />
             </ListItemButton>
           );
@@ -98,21 +114,20 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
 
       <Divider sx={{ opacity: 0.6 }} />
 
-      {/* Corporate footer info */}
       <Box sx={{ p: 3, bgcolor: 'action.hover', borderTop: '1px solid', borderColor: 'divider' }}>
-        <Typography variant="caption" display="block" sx={{ color: 'text.secondary', fontWeight: 600 }}>
+        <Text variant="caption" display="block" sx={{ color: 'text.secondary', fontWeight: 700 }}>
           ОБЪЕКТ: ЖК "Северные Высоты"
-        </Typography>
-        <Typography variant="caption" display="block" sx={{ color: 'text.secondary', mt: 0.5 }}>
+        </Text>
+        <Text variant="caption" display="block" sx={{ color: 'text.secondary', mt: 0.5, fontWeight: 500 }}>
           Подрядчик: ООО "СпецСтройКом"
-        </Typography>
+        </Text>
       </Box>
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
-      {/* Desktop App Bar */}
+
       <AppBar
         position="fixed"
         elevation={0}
@@ -138,32 +153,30 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
                 <MenuRoundedIcon />
               </IconButton>
             )}
-            <Typography 
-              variant="h6" 
-              component="h1" 
-              sx={{ 
-                fontWeight: 700, 
-                color: 'text.primary', 
-                fontFamily: 'Outfit, sans-serif',
+            <Text
+              variant="h6"
+              component="h1"
+              sx={{
+                fontWeight: 700,
                 fontSize: { xs: '1rem', sm: '1.25rem' },
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
               }}
             >
-              {isVerySmall 
+              {isVerySmall
                 ? (location.pathname === '/' ? 'Журнал работ' : 'Справочник')
                 : (location.pathname === '/' ? 'Журнал выполненных работ' : 'Справочник видов работ')
               }
-            </Typography>
+            </Text>
           </Box>
           <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 2 }}>
-            <Box 
-              sx={{ 
-                px: 2, 
-                py: 0.75, 
-                borderRadius: 2, 
-                bgcolor: 'success.light', 
+            <Box
+              sx={{
+                px: 2,
+                py: 0.75,
+                borderRadius: TOKENS.borderRadius.small,
+                bgcolor: 'success.light',
                 color: 'success.dark',
                 fontWeight: 600,
                 fontSize: '0.85rem'
@@ -175,14 +188,13 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
         </Toolbar>
       </AppBar>
 
-      {/* Responsive drawer */}
       <Box component="nav" sx={{ width: { md: DRAWER_WIDTH }, flexShrink: { md: 0 } }}>
         {isMobile ? (
           <Drawer
             variant="temporary"
             open={mobileOpen}
             onClose={handleDrawerToggle}
-            ModalProps={{ keepMounted: true }} // Better open performance on mobile
+            ModalProps={{ keepMounted: true }}
             sx={{
               '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH, border: 'none' },
             }}
@@ -193,9 +205,9 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
           <Drawer
             variant="permanent"
             sx={{
-              '& .MuiDrawer-paper': { 
-                boxSizing: 'border-box', 
-                width: DRAWER_WIDTH, 
+              '& .MuiDrawer-paper': {
+                boxSizing: 'border-box',
+                width: DRAWER_WIDTH,
                 borderRight: '1px solid',
                 borderColor: 'divider'
               },
@@ -207,7 +219,7 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
         )}
       </Box>
 
-      {/* Main content body */}
+      {}
       <Box
         component="main"
         sx={{
@@ -216,16 +228,16 @@ export const PageLayout: React.FC<{ children: React.ReactNode }> = ({ children }
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
-          pt: '72px', // AppBar spacing offset
+          pt: '72px',
           minWidth: 0,
           overflow: 'hidden',
         }}
       >
-        <Container 
-          maxWidth="lg" 
-          sx={{ 
-            py: { xs: 3, sm: 4 }, 
-            px: { xs: 2, sm: 4 }, 
+        <Container
+          maxWidth="lg"
+          sx={{
+            py: { xs: 3, sm: 4 },
+            px: { xs: 2, sm: 4 },
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',

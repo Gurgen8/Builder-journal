@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '../../shared/api/client';
-import { WorkLog, ApiError } from '../../shared/types';
+import { apiClient } from './api-client';
+import { WorkLog, ApiError } from '../types';
 
 export interface WorkLogsQueryParams {
   startDate?: string;
@@ -31,8 +31,8 @@ export const useCreateWorkLog = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
-    WorkLog, 
-    ApiError, 
+    WorkLog,
+    ApiError,
     { date: string; volume: number; unit: string; workerName: string; workTypeId: string }
   >({
     mutationFn: async (payload) => {
@@ -49,8 +49,8 @@ export const useUpdateWorkLog = () => {
   const queryClient = useQueryClient();
 
   return useMutation<
-    WorkLog, 
-    ApiError, 
+    WorkLog,
+    ApiError,
     { id: string; payload: Partial<{ date: string; volume: number; unit: string; workerName: string; workTypeId: string }> }
   >({
     mutationFn: async ({ id, payload }) => {

@@ -1,6 +1,7 @@
-/* eslint-disable react-refresh/only-export-components */
+
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Snackbar, Alert, AlertColor } from '@mui/material';
+import { TOKENS } from '../../constants/tokens';
 
 interface ToastContextType {
   showSuccess: (message: string) => void;
@@ -57,11 +58,15 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         onClose={handleClose}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
-        <Alert 
-          onClose={handleClose} 
-          severity={severity} 
-          variant="filled" 
-          sx={{ width: '100%', borderRadius: 2, boxShadow: '0 4px 20px 0 rgba(0,0,0,0.1)' }}
+        <Alert
+          onClose={handleClose}
+          severity={severity}
+          variant="filled"
+          sx={{
+            width: '100%',
+            borderRadius: TOKENS.borderRadius.small,
+            boxShadow: TOKENS.shadows.toast,
+          }}
         >
           {message}
         </Alert>

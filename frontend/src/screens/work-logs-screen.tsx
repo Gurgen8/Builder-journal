@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Stack, Alert, AlertTitle } from '@mui/material';
+import { Box, Stack, Alert, AlertTitle } from '@mui/material';
+import { TOKENS } from '../constants/tokens';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { WorkLogsTable } from '../widgets/work-logs-table/work-logs-table';
-import { WorkLogFilters } from '../features/work-log-filters/work-log-filters';
-import { WorkLogFormModal } from '../features/work-log-form/work-log-form-modal';
-import { ConfirmDialog } from '../shared/ui/confirm-dialog';
-import { useWorkLogs, useDeleteWorkLog, WorkLogsQueryParams } from '../entities/work-log/api';
-import { useToast } from '../shared/ui/toast-provider';
-import { WorkLog, ApiError } from '../shared/types';
+import { WorkLogsTable } from '../components/work-logs-table';
+import { WorkLogFilters } from '../components/work-log-filters';
+import { WorkLogFormModal } from '../components/work-log-form-modal';
+import { ConfirmDialog } from '../components/shared/ConfirmDialog';
+import { useWorkLogs, useDeleteWorkLog, WorkLogsQueryParams } from '../services/work-log-service';
+import { useToast } from '../components/shared/ToastProvider';
+import { WorkLog, ApiError } from '../types';
+import { ScreenContainer } from '../components/shared/ScreenContainer';
+import { Button } from '../components/shared/Button';
+import { Text } from '../components/shared/Text';
 
-export const WorkLogsPage: React.FC = () => {
+export const WorkLogsScreen: React.FC = () => {
   const toast = useToast();
-  
-  // 1. Filter Query Parameters State
+
   const [filters, setFilters] = useState<WorkLogsQueryParams>({
     search: '',
     startDate: undefined,
@@ -22,15 +25,12 @@ export const WorkLogsPage: React.FC = () => {
     sortOrder: 'desc',
   });
 
-  // 2. Add / Edit Modal States
   const [formOpen, setFormOpen] = useState(false);
   const [activeLog, setActiveLog] = useState<WorkLog | null>(null);
 
-  // 3. Delete Confirmation Dialog States
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [targetDeleteId, setTargetDeleteId] = useState<string | null>(null);
 
-  // 4. Server State Queries & Mutations
   const { data: logs = [], isLoading, isError, error, refetch } = useWorkLogs(filters);
   const deleteMutation = useDeleteWorkLog();
 
@@ -68,8 +68,8 @@ export const WorkLogsPage: React.FC = () => {
   const isDeleting = deleteMutation.isPending;
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, width: '100%', minWidth: 0 }}>
-      {/* Page Header Actions */}
+    <ScreenContainer>
+      { }
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
         justifyContent="space-between"
@@ -78,45 +78,35 @@ export const WorkLogsPage: React.FC = () => {
         sx={{ mb: 4 }}
       >
         <Box>
-          <Typography variant="h5" sx={{ fontWeight: 800, fontFamily: 'Outfit, sans-serif', color: 'text.primary' }}>
+          <Text variant="h5" sx={{ fontWeight: 800 }}>
             Журнал производства работ
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          </Text>
+          <Text variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
             Контролируйте объемы, исполнителей и даты выполнения технологических этапов на объекте.
-          </Typography>
+          </Text>
         </Box>
         <Button
           variant="contained"
           color="primary"
           startIcon={<AddRoundedIcon />}
           onClick={handleCreateClick}
+          hasShadow
           sx={{
-            py: 1.25,
-            px: 3,
-            borderRadius: 3,
-            fontWeight: 600,
-            boxShadow: '0 4px 14px 0 rgba(0, 102, 102, 0.25)',
-            textTransform: 'none',
             alignSelf: { xs: 'stretch', sm: 'auto' },
-            '&:hover': {
-              boxShadow: '0 6px 20px 0 rgba(0, 102, 102, 0.35)',
-            },
           }}
         >
           Внести запись
         </Button>
       </Stack>
 
-      {/* Query Filter panel */}
+      { }
       <WorkLogFilters filters={filters} onFiltersChange={setFilters} />
-
-      {/* Database Error Alert banner */}
       {isError && (
-        <Alert 
-          severity="error" 
-          sx={{ mb: 3, borderRadius: 3 }}
+        <Alert
+          severity="error"
+          sx={{ mb: 3, borderRadius: TOKENS.borderRadius.large }}
           action={
-            <Button color="inherit" size="small" onClick={() => refetch()}>
+            <Button color="inherit" size="small" onClick={() => refetch()} sx={{ p: 0.5, py: 0.25 }}>
               Повторить запрос
             </Button>
           }
@@ -126,22 +116,19 @@ export const WorkLogsPage: React.FC = () => {
         </Alert>
       )}
 
-      {/* Data Grid table widget */}
+      { }
       <WorkLogsTable
         logs={logs}
         isLoading={isLoading}
         onEdit={handleEditClick}
         onDelete={handleDeleteClick}
       />
-
-      {/* Dynamic Creation / Modification form modal */}
       <WorkLogFormModal
         open={formOpen}
         onClose={() => setFormOpen(false)}
         editLog={activeLog}
       />
 
-      {/* Safety action deletion modal */}
       <ConfirmDialog
         open={deleteConfirmOpen}
         title="Удалить запись?"
@@ -154,6 +141,6 @@ export const WorkLogsPage: React.FC = () => {
           setTargetDeleteId(null);
         }}
       />
-    </Box>
+    </ScreenContainer>
   );
 };
