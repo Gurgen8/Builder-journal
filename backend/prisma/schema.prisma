@@ -1,0 +1,32 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model WorkType {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  workLogs  WorkLog[]
+
+  @@map("work_types")
+}
+
+model WorkLog {
+  id         String   @id @default(uuid())
+  date       DateTime
+  volume     Float
+  unit       String
+  workerName String   @map("worker_name")
+  workTypeId String   @map("work_type_id")
+  workType   WorkType @relation(fields: [workTypeId], references: [id], onDelete: Restrict)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([date])
+  @@map("work_logs")
+}
