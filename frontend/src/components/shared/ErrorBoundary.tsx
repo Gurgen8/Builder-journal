@@ -1,7 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { Box, Container } from '@mui/material';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 import { Card } from './Card';
 import { Text } from './Text';
 import { Button } from './Button';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button as MuiButton, ButtonProps as MuiButtonProps, CircularProgress } from '@mui/material';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export interface ButtonProps extends Omit<MuiButtonProps, 'color' | 'classes'>, React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;

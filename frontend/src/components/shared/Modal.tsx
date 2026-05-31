@@ -6,7 +6,7 @@ import {
   DialogActions,
   DialogProps,
 } from '@mui/material';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export interface ModalProps extends Omit<DialogProps, 'title'> {
   title: React.ReactNode;

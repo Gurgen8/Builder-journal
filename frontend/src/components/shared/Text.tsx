@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography as MuiTypography, TypographyProps as MuiTypographyProps } from '@mui/material';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export interface TextProps extends MuiTypographyProps {
   fontFamilyType?: 'outfit' | 'inter';

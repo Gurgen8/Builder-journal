@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { Snackbar, Alert, AlertColor } from '@mui/material';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 interface ToastContextType {
   showSuccess: (message: string) => void;

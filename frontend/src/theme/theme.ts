@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export const corporateTheme = createTheme({
   palette: {

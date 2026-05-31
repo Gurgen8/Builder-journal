@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 import './index.css';
 
 const root = document.documentElement;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Paper, PaperProps } from '@mui/material';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export interface CardProps extends PaperProps {
   hoverable?: boolean;

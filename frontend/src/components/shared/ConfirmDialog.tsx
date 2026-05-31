@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { Button } from './Button';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 interface ConfirmDialogProps {
   open: boolean;

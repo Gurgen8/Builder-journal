@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Box, Stack, Grid, Alert } from '@mui/material';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
-import { WorkTypeFormModal } from '../components/work-type-form-modal';
-import { useWorkTypes } from '../services/work-type-service';
-import { formatDate } from '../utils/date';
-import { ScreenContainer } from '../components/shared/ScreenContainer';
-import { Button } from '../components/shared/Button';
-import { Card } from '../components/shared/Card';
-import { Text } from '../components/shared/Text';
-import { Input } from '../components/shared/Input';
-import { EmptyState } from '../components/shared/EmptyState';
-import { Loader } from '../components/shared/Loader';
+import { WorkTypeFormModal } from '@/components/work-type-form-modal';
+import { useWorkTypes } from '@/services/work-type-service';
+import { formatDate } from '@/utils/date';
+import { ScreenContainer } from '@/components/shared/ScreenContainer';
+import { Button } from '@/components/shared/Button';
+import { Card } from '@/components/shared/Card';
+import { Text } from '@/components/shared/Text';
+import { Input } from '@/components/shared/Input';
+import { EmptyState } from '@/components/shared/EmptyState';
+import { Loader } from '@/components/shared/Loader';
 
 export const WorkTypesScreen: React.FC = () => {
   const [formOpen, setFormOpen] = useState(false);

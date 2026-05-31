@@ -12,12 +12,12 @@ import {
 } from '@mui/material';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FilterListOffRoundedIcon from '@mui/icons-material/FilterListOffRounded';
-import { useWorkTypes } from '../services/work-type-service';
-import { WorkLogsQueryParams } from '../services/work-log-service';
+import { useWorkTypes } from '@/services/work-type-service';
+import { WorkLogsQueryParams } from '@/services/work-log-service';
 import { Card } from './shared/Card';
 import { Input } from './shared/Input';
 import { Button } from './shared/Button';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 interface WorkLogFiltersProps {
   filters: WorkLogsQueryParams;

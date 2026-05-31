@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Box, Stack, Alert, AlertTitle } from '@mui/material';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import { WorkLogsTable } from '../components/work-logs-table';
-import { WorkLogFilters } from '../components/work-log-filters';
-import { WorkLogFormModal } from '../components/work-log-form-modal';
-import { ConfirmDialog } from '../components/shared/ConfirmDialog';
-import { useWorkLogs, useDeleteWorkLog, WorkLogsQueryParams } from '../services/work-log-service';
-import { useToast } from '../components/shared/ToastProvider';
-import { WorkLog, ApiError } from '../types';
-import { ScreenContainer } from '../components/shared/ScreenContainer';
-import { Button } from '../components/shared/Button';
-import { Text } from '../components/shared/Text';
+import { WorkLogsTable } from '@/components/work-logs-table';
+import { WorkLogFilters } from '@/components/work-log-filters';
+import { WorkLogFormModal } from '@/components/work-log-form-modal';
+import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
+import { useWorkLogs, useDeleteWorkLog, WorkLogsQueryParams } from '@/services/work-log-service';
+import { useToast } from '@/components/shared/ToastProvider';
+import { WorkLog, ApiError } from '@/types';
+import { ScreenContainer } from '@/components/shared/ScreenContainer';
+import { Button } from '@/components/shared/Button';
+import { Text } from '@/components/shared/Text';
 
 export const WorkLogsScreen: React.FC = () => {
   const toast = useToast();

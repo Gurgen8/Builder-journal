@@ -11,16 +11,16 @@ import {
   Grid,
   Box,
 } from '@mui/material';
-import { useWorkTypes } from '../services/work-type-service';
-import { useCreateWorkLog, useUpdateWorkLog } from '../services/work-log-service';
+import { useWorkTypes } from '@/services/work-type-service';
+import { useCreateWorkLog, useUpdateWorkLog } from '@/services/work-log-service';
 import { useToast } from './shared/ToastProvider';
-import { formatIsoDate } from '../utils/date';
-import { WorkLog, ApiError } from '../types';
+import { formatIsoDate } from '@/utils/date';
+import { WorkLog, ApiError } from '@/types';
 import { Modal } from './shared/Modal';
 import { Input } from './shared/Input';
 import { Button } from './shared/Button';
 import { Text } from './shared/Text';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 export const workLogSchema = z.object({
   date: z.string().min(1, 'Укажите дату выполнения работ'),

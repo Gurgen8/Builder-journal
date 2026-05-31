@@ -3,13 +3,13 @@ import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import { Box, IconButton, Tooltip } from '@mui/material';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
-import { WorkLog } from '../types';
-import { formatDate } from '../utils/date';
+import { WorkLog } from '@/types';
+import { formatDate } from '@/utils/date';
 import { Card } from './shared/Card';
 import { Loader } from './shared/Loader';
 import { EmptyState } from './shared/EmptyState';
 import { Text } from './shared/Text';
-import { TOKENS } from '../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 interface WorkLogsTableProps {
   logs: WorkLog[];

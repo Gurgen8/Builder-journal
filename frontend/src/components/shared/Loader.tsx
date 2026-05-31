@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 
 interface LoaderProps {
   message?: string;

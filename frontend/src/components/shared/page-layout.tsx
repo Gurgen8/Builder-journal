@@ -19,7 +19,7 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded';
 import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
-import { TOKENS } from '../../constants/tokens';
+import { TOKENS } from '@/constants/tokens';
 import { Text } from './Text';
 
 const DRAWER_WIDTH = 280;
