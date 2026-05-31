@@ -15,10 +15,12 @@ import { Text } from '@/components/shared/Text';
 import { Input } from '@/components/shared/Input';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { Loader } from '@/components/shared/Loader';
+import { useDebounce } from '@/utils/debounce';
 
 export const WorkTypesScreen: React.FC = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
 
   const { data: workTypes = [], isLoading, isError, error, refetch } = useWorkTypes();
 
@@ -27,7 +29,7 @@ export const WorkTypesScreen: React.FC = () => {
   };
 
   const filteredTypes = workTypes.filter((type) =>
-    type.name.toLowerCase().includes(search.toLowerCase())
+    type.name.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
   return (
@@ -97,7 +99,7 @@ export const WorkTypesScreen: React.FC = () => {
         <EmptyState
           title="Справочник пуст"
           description={
-            search
+            debouncedSearch
               ? 'Нет видов работ, соответствующих поисковому запросу.'
               : 'В справочнике пока нет доступных видов работ. Добавьте первый вид работ.'
           }

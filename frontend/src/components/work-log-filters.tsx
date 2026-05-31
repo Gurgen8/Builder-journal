@@ -14,6 +14,7 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import FilterListOffRoundedIcon from '@mui/icons-material/FilterListOffRounded';
 import { useWorkTypes } from '@/services/work-type-service';
 import { WorkLogsQueryParams } from '@/services/work-log-service';
+import { useDebounce } from '@/utils/debounce';
 import { Card } from './shared/Card';
 import { Input } from './shared/Input';
 import { Button } from './shared/Button';
@@ -32,9 +33,21 @@ const selectStyles = {
 
 export const WorkLogFilters: React.FC<WorkLogFiltersProps> = ({ filters, onFiltersChange }) => {
   const { data: workTypes = [] } = useWorkTypes();
+  const [localSearch, setLocalSearch] = React.useState(filters.search || '');
+  const debouncedSearch = useDebounce(localSearch, 300);
+
+  React.useEffect(() => {
+    setLocalSearch(filters.search || '');
+  }, [filters.search]);
+
+  React.useEffect(() => {
+    if (debouncedSearch !== (filters.search || '')) {
+      onFiltersChange({ ...filters, search: debouncedSearch || undefined });
+    }
+  }, [debouncedSearch]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onFiltersChange({ ...filters, search: event.target.value });
+    setLocalSearch(event.target.value);
   };
 
   const handleDateChange = (field: 'startDate' | 'endDate') => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +78,7 @@ export const WorkLogFilters: React.FC<WorkLogFiltersProps> = ({ filters, onFilte
         <Grid item xs={12} md={4}>
           <Input
             placeholder="Поиск по исполнителю или виду работ..."
-            value={filters.search || ''}
+            value={localSearch}
             onChange={handleSearchChange}
             InputProps={{
               startAdornment: (
