@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsISO8601, IsUUID, IsIn } from 'class-validator';
+import { IsOptional, IsString, IsISO8601, IsUUID, IsIn, IsNumber, Min } from 'class-validator';
 
 export class QueryWorkLogDto {
   @IsOptional()
@@ -28,4 +28,14 @@ export class QueryWorkLogDto {
   @IsString()
   @IsIn(['asc', 'desc'], { message: 'Направление сортировки может быть только asc или desc' })
   sortOrder?: 'asc' | 'desc' = 'desc';
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1, { message: 'Номер страницы должен быть не менее 1' })
+  page?: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(1, { message: 'Лимит на страницу должен быть не менее 1' })
+  limit?: number;
 }

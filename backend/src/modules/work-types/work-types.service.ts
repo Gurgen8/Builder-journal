@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, Logger } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateWorkTypeDto } from './dto/create-work-type.dto';
 
@@ -34,6 +34,23 @@ export class WorkTypesService {
       data: {
         name: trimmedName,
       },
+    });
+  }
+
+  async remove(id: string) {
+    this.logger.log(`Deleting work type with ID: ${id}`);
+
+    const existing = await this.prisma.workType.findUnique({
+      where: { id },
+    });
+
+    if (!existing) {
+      this.logger.warn(`Work type with ID "${id}" not found`);
+      throw new NotFoundException(`Вид работы с ID "${id}" не найден`);
+    }
+
+    return this.prisma.workType.delete({
+      where: { id },
     });
   }
 }

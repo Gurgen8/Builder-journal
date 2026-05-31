@@ -31,7 +31,7 @@ const selectStyles = {
   },
 };
 
-export const WorkLogFilters: React.FC<WorkLogFiltersProps> = ({ filters, onFiltersChange }) => {
+export const WorkLogFilters = React.memo<WorkLogFiltersProps>(({ filters, onFiltersChange }) => {
   const { data: workTypes = [] } = useWorkTypes();
   const [localSearch, setLocalSearch] = React.useState(filters.search || '');
   const debouncedSearch = useDebounce(localSearch, 300);
@@ -159,4 +159,4 @@ export const WorkLogFilters: React.FC<WorkLogFiltersProps> = ({ filters, onFilte
       </Grid>
     </Card>
   );
-};
+});

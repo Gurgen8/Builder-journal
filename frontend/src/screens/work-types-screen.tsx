@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Box, Stack, Grid, Alert } from '@mui/material';
+import { Box, Stack, Grid, Alert, IconButton } from '@mui/material';
 import { TOKENS } from '@/constants/tokens';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
 import CalendarMonthRoundedIcon from '@mui/icons-material/CalendarMonthRounded';
+import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import { WorkTypeFormModal } from '@/components/work-type-form-modal';
-import { useWorkTypes } from '@/services/work-type-service';
+import { useWorkTypes, useDeleteWorkType } from '@/services/work-type-service';
 import { formatDate } from '@/utils/date';
 import { ScreenContainer } from '@/components/shared/ScreenContainer';
 import { Button } from '@/components/shared/Button';
@@ -15,22 +16,53 @@ import { Text } from '@/components/shared/Text';
 import { Input } from '@/components/shared/Input';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { Loader } from '@/components/shared/Loader';
+import { ConfirmDialog } from '@/components/shared/ConfirmDialog';
+import { useToast } from '@/components/shared/ToastProvider';
 import { useDebounce } from '@/utils/debounce';
+import { ApiError } from '@/types';
 
 export const WorkTypesScreen: React.FC = () => {
+  const toast = useToast();
   const [formOpen, setFormOpen] = useState(false);
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebounce(search, 300);
 
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [targetDeleteId, setTargetDeleteId] = useState<string | null>(null);
+
   const { data: workTypes = [], isLoading, isError, error, refetch } = useWorkTypes();
+  const deleteMutation = useDeleteWorkType();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
+  const handleDeleteClick = (id: string) => {
+    setTargetDeleteId(id);
+    setDeleteConfirmOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!targetDeleteId) return;
+
+    deleteMutation.mutate(targetDeleteId, {
+      onSuccess: () => {
+        toast.showSuccess('Вид работ успешно удален');
+        setDeleteConfirmOpen(false);
+        setTargetDeleteId(null);
+      },
+      onError: (err: ApiError) => {
+        toast.showError(err.message || 'Не удалось удалить вид работы');
+        setDeleteConfirmOpen(false);
+      },
+    });
+  };
+
   const filteredTypes = workTypes.filter((type) =>
     type.name.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
+
+  const isDeleting = deleteMutation.isPending;
 
   return (
     <ScreenContainer>
@@ -129,11 +161,25 @@ export const WorkTypesScreen: React.FC = () => {
                 >
                   {type.name}
                 </Text>
-                <Stack direction="row" alignItems="center" gap={1} sx={{ color: 'text.secondary' }}>
-                  <CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />
-                  <Text variant="caption" sx={{ fontWeight: 500, color: 'inherit' }}>
-                    Добавлен: {formatDate(type.createdAt)}
-                  </Text>
+                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 2 }}>
+                  <Stack direction="row" alignItems="center" gap={1} sx={{ color: 'text.secondary' }}>
+                    <CalendarMonthRoundedIcon sx={{ fontSize: 16 }} />
+                    <Text variant="caption" sx={{ fontWeight: 500, color: 'inherit' }}>
+                      Добавлен: {formatDate(type.createdAt)}
+                    </Text>
+                  </Stack>
+                  <IconButton
+                    color="error"
+                    size="small"
+                    onClick={() => handleDeleteClick(type.id)}
+                    sx={{
+                      bgcolor: 'error.light',
+                      color: 'error.main',
+                      '&:hover': { bgcolor: 'error.main', color: 'error.contrastText' },
+                    }}
+                  >
+                    <DeleteOutlineRoundedIcon fontSize="small" />
+                  </IconButton>
                 </Stack>
               </Card>
             </Grid>
@@ -143,6 +189,19 @@ export const WorkTypesScreen: React.FC = () => {
 
       { }
       <WorkTypeFormModal open={formOpen} onClose={() => setFormOpen(false)} />
+
+      <ConfirmDialog
+        open={deleteConfirmOpen}
+        title="Удалить вид работ?"
+        description="Вы собираетесь удалить этот вид работ. Если на него ссылаются какие-либо записи в журнале, удаление будет отклонено системой."
+        confirmText="Удалить"
+        isLoading={isDeleting}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => {
+          setDeleteConfirmOpen(false);
+          setTargetDeleteId(null);
+        }}
+      />
     </ScreenContainer>
   );
 };

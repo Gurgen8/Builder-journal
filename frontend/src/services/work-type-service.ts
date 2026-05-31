@@ -29,3 +29,16 @@ export const useCreateWorkType = () => {
     },
   });
 };
+
+export const useDeleteWorkType = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation<void, ApiError, string>({
+    mutationFn: async (id) => {
+      await apiClient.delete(`/work-types/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: workTypeKeys.all });
+    },
+  });
+};

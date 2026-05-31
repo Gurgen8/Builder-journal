@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Param, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { WorkTypesService } from './work-types.service';
 import { CreateWorkTypeDto } from './dto/create-work-type.dto';
 
@@ -15,5 +15,11 @@ export class WorkTypesController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() createWorkTypeDto: CreateWorkTypeDto) {
     return this.workTypesService.create(createWorkTypeDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string) {
+    await this.workTypesService.remove(id);
   }
 }

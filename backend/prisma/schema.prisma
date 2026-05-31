@@ -28,5 +28,8 @@ model WorkLog {
   updatedAt  DateTime @updatedAt @map("updated_at")
 
   @@index([date])
+  @@index([workTypeId])
+  @@index([workerName])
   @@map("work_logs")
 }
+

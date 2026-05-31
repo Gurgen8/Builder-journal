@@ -8,6 +8,8 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
+import { Prisma } from '@prisma/client';
+
 interface ErrorResponse {
   statusCode: number;
   timestamp: string;
@@ -48,19 +50,19 @@ export class HttpExceptionFilter implements ExceptionFilter {
       } else {
         message = exception.message;
       }
-    } else {
-      this.logger.error('Unhandled Exception caught by filter:', exception);
-      const errorString = String(exception);
-      if (errorString.includes('PrismaClientKnownRequestError') && errorString.includes('P2003')) {
+    } else if (exception instanceof Prisma.PrismaClientKnownRequestError) {
+      if (exception.code === 'P2003') {
         status = HttpStatus.CONFLICT;
         message = 'Невозможно удалить запись, так как на неё ссылаются другие объекты';
-      } else if (
-        errorString.includes('PrismaClientKnownRequestError') &&
-        errorString.includes('P2002')
-      ) {
+      } else if (exception.code === 'P2002') {
         status = HttpStatus.CONFLICT;
         message = 'Запись с такими уникальными полями уже существует';
+      } else {
+        this.logger.error(`Prisma error ${exception.code}:`, exception);
+        message = `Ошибка базы данных (${exception.code})`;
       }
+    } else {
+      this.logger.error('Unhandled Exception caught by filter:', exception);
     }
 
     const errorBody: ErrorResponse = {

@@ -13,7 +13,7 @@ export class WorkLogsService {
 
   async findAll(query: QueryWorkLogDto) {
     this.logger.log(`Fetching work logs with query params: ${JSON.stringify(query)}`);
-    const { startDate, endDate, workTypeId, search, sortBy, sortOrder } = query;
+    const { startDate, endDate, workTypeId, search, sortBy, sortOrder, page, limit } = query;
 
     const where: Prisma.WorkLogWhereInput = {};
 
@@ -70,7 +70,38 @@ export class WorkLogsService {
       };
     }
 
-    return this.prisma.workLog.findMany({
+    if (page && limit) {
+      const skip = (page - 1) * limit;
+      const [total, data] = await Promise.all([
+        this.prisma.workLog.count({ where }),
+        this.prisma.workLog.findMany({
+          where,
+          orderBy,
+          skip,
+          take: limit,
+          include: {
+            workType: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        }),
+      ]);
+
+      return {
+        data,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
+    }
+
+    const data = await this.prisma.workLog.findMany({
       where,
       orderBy,
       include: {
@@ -82,6 +113,8 @@ export class WorkLogsService {
         },
       },
     });
+
+    return data;
   }
 
   async findOne(id: string) {

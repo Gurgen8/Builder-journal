@@ -30,9 +30,7 @@ async function bootstrap() {
   const port = process.env.PORT || 3001;
   await app.listen(port);
 
-  logger.log(`=======================================================`);
-  logger.log(`🚀 Construction Work Log API is running on: http://localhost:${port}/api`);
-  logger.log(`=======================================================`);
+  logger.log(`Construction Work Log API is running: http://localhost:${port}/api`);
 }
 
 bootstrap();

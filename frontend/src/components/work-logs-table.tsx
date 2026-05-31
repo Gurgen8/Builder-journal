@@ -58,7 +58,7 @@ const tableStyles = {
   },
 };
 
-export const WorkLogsTable: React.FC<WorkLogsTableProps> = ({ logs, isLoading, onEdit, onDelete }) => {
+export const WorkLogsTable = React.memo<WorkLogsTableProps>(({ logs, isLoading, onEdit, onDelete }) => {
   const columns: GridColDef<WorkLog>[] = [
     {
       field: 'date',
@@ -198,4 +198,4 @@ export const WorkLogsTable: React.FC<WorkLogsTableProps> = ({ logs, isLoading, o
       />
     </Card>
   );
-};
+});
